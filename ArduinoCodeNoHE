@@ -1,0 +1,276 @@
+//Garrett Padilla, Landon Kruse, Evan Wansa, Minh Ho
+//Capstone II code
+
+  #include <SPI.h> //arduino SPI library
+  #define PWM 4
+  #define nFAULT 19
+  #define SOA 22
+  #define SOB 24
+  #define SOC 26
+  #define CAL 28
+  #define STATE0 36
+  #define STATE2 38
+  #define STATE1 40
+  #define nBRAKE 42
+  #define DIR 44
+  #define ENABLE 48
+  #define SDO 50 //MISO
+  #define SDI 51 //MOSI
+  #define SCLK 52
+  #define nSCS 53 //SS
+ 
+void setup() {
+   // put your setup code here, to run once:
+  Serial.begin(9600);
+  delay(1);
+  Serial.println(1);
+  delay(1);
+  pinMode(PWM, OUTPUT); //sets PWM as an output
+  pinMode(nFAULT, INPUT); //sets nFAULT as an input
+  pinMode(SOA, INPUT); //sets SOA as an input
+  pinMode(SOB, INPUT); //sets SOB as an input
+  pinMode(SOC, INPUT); //sets SOC as an input
+  pinMode(CAL, OUTPUT); //sets CAL as an output
+  pinMode(STATE0, OUTPUT); //sets STATE0 as an output
+  pinMode(STATE2, OUTPUT); //sets STATE2 as an output
+  pinMode(STATE1, OUTPUT); //sets STATE1 as an output
+  pinMode(nBRAKE, OUTPUT); //sets nBRAKE as an output
+  digitalWrite(nBRAKE, HIGH);
+  pinMode(DIR, OUTPUT); //sets DIR as an output
+  digitalWrite(DIR, LOW);
+  pinMode(ENABLE, OUTPUT); //sets ENABLE as an output
+  pinMode(SDO, INPUT); //sets SDO (MISO) as an input
+  pinMode(SDI, OUTPUT); //sets SDI (MOSI) as an output
+  pinMode(SCLK, OUTPUT); //sets SCLK as an output
+  pinMode(nSCS, OUTPUT); //sets nSCS (SS) as an output
+  digitalWrite(nSCS, HIGH);
+  delay(1);
+    
+  digitalWrite(ENABLE, HIGH); //Enable pin low = sleep mode
+  delay(1);
+
+//////////////////////////SPI interface///////////////////////////////
+  word reg1_write = 0x1341;
+  word reg2_write = 0x1BAC;
+  word reg3_write = 0x24AC;
+  word reg4_write = 0x299D;
+  word reg5_write = 0x32E3;
+
+  word fault1_read = 0x8000;
+  word fault2_read = 0x9000;
+
+  word reg1_read = 0x9341;
+  word reg2_read = 0x9BAC;
+  word reg3_read = 0xA4AC;
+  word reg4_read = 0xA99D;
+  word reg5_read = 0xB2E3;
+ 
+  SPI.setClockDivider(SPI_CLOCK_DIV128);
+  SPI.setBitOrder(MSBFIRST);
+  SPI.setDataMode(SPI_MODE1);
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  SPI.transfer16(reg1_write);
+  delay(100);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  SPI.transfer16(reg2_write);
+  delay(100);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  SPI.transfer16(reg3_write);
+  delay(100);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+   
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  SPI.transfer16(reg4_write);
+  delay(100);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  SPI.transfer16(reg5_write);
+  delay(100);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  word VAR1 = SPI.transfer16(reg1_read);
+  delay(100);
+  Serial.println(VAR1, BIN);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  word VAR2 = SPI.transfer16(reg2_read);
+  delay(100);
+  Serial.println(VAR2, BIN);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  word VAR3 = SPI.transfer16(reg3_read);
+  delay(100);
+  Serial.println(VAR3, BIN);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  word VAR4 = SPI.transfer16(reg4_read);
+  delay(100);
+  Serial.println(VAR4, BIN);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  word VAR5 = SPI.transfer16(reg5_read);
+  delay(100);
+  Serial.println(VAR5, BIN);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  word VAR6 = SPI.transfer16(fault1_read);
+  delay(100);
+  Serial.println(VAR6, BIN);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  word VAR7 = SPI.transfer16(fault2_read);
+  delay(100);
+  Serial.println(VAR7, BIN);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+
+ 
+  Serial.println("End");
+  delay(100);
+
+  pinMode(PWM, OUTPUT); //sets PWM as an output
+  analogWrite(PWM, 240); //sets PWM duty cycle
+
+  digitalWrite(STATE0, LOW);
+  digitalWrite(STATE1, LOW);
+  digitalWrite(STATE2, LOW);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  /*digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  Serial.println(SPI.transfer16(0x8000), BIN);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);
+
+  digitalWrite(nSCS, LOW);
+  delay(100);
+  SPI.begin();
+  delay(100);
+  Serial.println(SPI.transfer16(0x9000), BIN);
+  SPI.end(); //Ends the SPI process
+  delay (100); //delay 1mS
+  digitalWrite(nSCS, HIGH);
+  delay(100);*/
+ 
+  for(int i = 20; i >= 1; i--)
+  {
+
+  digitalWrite(STATE0, HIGH); //sets state 2 on first loop and state 1 after first loop
+  delay(i);
+  digitalWrite(STATE1, LOW); //sets state 2 after first loop
+  delay(i);
+  digitalWrite(STATE2, HIGH); //sets state 3
+  delay(i);
+  digitalWrite(STATE0, LOW); //sets state 3
+  delay(i);
+  digitalWrite(STATE1, HIGH); // sets state 5
+  delay(i);
+  digitalWrite(STATE2, LOW); //sets state 3
+  delay(i);
+  }
+
+  while(1)
+  {
+  digitalWrite(STATE0, HIGH); //sets state 2 on first loop and state 1 after first loop
+  delay(3);
+  digitalWrite(STATE1, LOW); //sets state 2 after first loop
+  delay(3);
+  digitalWrite(STATE2, HIGH); //sets state 3
+  delay(3);
+  digitalWrite(STATE0, LOW); //sets state 3
+  delay(3);
+  digitalWrite(STATE1, HIGH); // sets state 5
+  delay(3);
+  digitalWrite(STATE2, LOW); //sets state 3
+  delay(3);
+  }
+}
